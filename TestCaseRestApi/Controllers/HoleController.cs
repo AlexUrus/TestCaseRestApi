@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestCaseRestApi.Data;
+using TestCaseRestApi.Models;
 using TestCaseRestApi.Objects;
+using TestCaseRestApi.Repositories;
 
 namespace TestCaseRestApi.Controllers
 {
@@ -9,71 +11,64 @@ namespace TestCaseRestApi.Controllers
     [ApiController]
     public class HoleController : ControllerBase
     {
-        private readonly AppDataContext _context;
-
-        public HoleController(AppDataContext context)
+        private readonly HoleRepository _repository;
+        public HoleController(HoleRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        // GET api/Hole
+        // GET api/HoleModel
         [HttpGet]
         public JsonResult Get()
         {
-            var holes = _context.Holes.ToList();
-            return new JsonResult(holes);
+            var model = _repository.GetAll();
+            return new JsonResult(Ok(model));
         }
 
-        // GET api/Hole/5
+        // GET api/HoleModel/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
-            var hole = _context.Holes.Find(id);
-            if (hole == null)
+            var model = _repository.GetById(id);
+            if (model == null)
                 return new JsonResult(NotFound());
 
-            return new JsonResult(hole);
+            return new JsonResult(Ok(model));
         }
 
-        // POST api/Hole
+        // POST api/HoleModel
         [HttpPost]
-        public JsonResult Post([FromBody] Hole hole)
+        public JsonResult Post(HoleModel model)
         {
-            _context.Holes.Add(hole);
-            _context.SaveChanges();
+            _repository.Add(model);
             return new JsonResult(NoContent());
         }
 
-        // PUT api/Hole/5
+        // PUT api/HoleModel/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, [FromBody] Hole hole)
+        public JsonResult Put(int id, HoleModel model)
         {
-            if (id != hole.Id)
+            if (id != model.Id)
                 return new JsonResult(BadRequest());
 
-            var existingHole = _context.Holes.Find(id);
-            if (existingHole == null)
+            var existingModel = _repository.GetById(id);
+            if (existingModel == null)
                 return new JsonResult(NotFound());
 
-            existingHole.Name = hole.Name;
-            existingHole.DrillBlock = hole.DrillBlock;
-            existingHole.Depth = hole.Depth;
-
-            _context.SaveChanges();
+            _repository.Update(existingModel);
 
             return new JsonResult(NoContent());
         }
 
-        // DELETE api/Hole/5
+        // DELETE api/HoleModel/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            var hole = _context.Holes.Find(id);
-            if (hole == null)
+            var model = _repository.GetById(id);
+            if (model == null)
                 return new JsonResult(NotFound());
 
-            _context.Holes.Remove(hole);
-            _context.SaveChanges();
+            _repository.Delete(id);
 
             return new JsonResult(NoContent());
         }

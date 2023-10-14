@@ -12,8 +12,10 @@ namespace TestCaseRestApi.Data
 
         public AppDataContext(DbContextOptions<AppDataContext> options) : base(options)
         {
-            Database.EnsureCreated();  
+            Database.EnsureCreated();
         }
+
+        
 
     }
 }

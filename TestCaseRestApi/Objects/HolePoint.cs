@@ -3,14 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestCaseRestApi.Objects
 {
-    public class HolePoint
+    public class HolePoint : AbstractObject
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonProperty("Id")]
-        public int Id { get; set; }
-
-        [JsonProperty("Hole")]
-        public Hole Hole { get; set; }
+        [JsonProperty("HoleId")]
+        public int HoleId { get; set; }
 
         [JsonProperty("X")]
         public double X { get; set; }
@@ -20,5 +16,9 @@ namespace TestCaseRestApi.Objects
 
         [JsonProperty("Z")]
         public double Z { get; set; }
+
+
+        [ForeignKey("HoleId")]
+        public Hole Hole { get; set; }
     }
 }

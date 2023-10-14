@@ -3,14 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestCaseRestApi.Objects
 {
-    public class DrillBlockPoint
+    public class DrillBlockPoint : AbstractObject
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonProperty("Id")]
-        public int Id { get; set; }
-
-        [JsonProperty("DrillBlock")]
-        public DrillBlock DrillBlock { get; set; }
+        [JsonProperty("DrillBlockId")]
+        public int DrillBlockId { get; set; }
 
         [JsonProperty("Sequence")]
         public int Sequence { get; set; }
@@ -23,5 +19,9 @@ namespace TestCaseRestApi.Objects
 
         [JsonProperty("Z")]
         public double Z { get; set; }
+
+
+        [ForeignKey("DrillBlockId")]
+        public DrillBlock DrillBlock { get; set; }
     }
 }
