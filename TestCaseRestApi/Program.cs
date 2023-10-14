@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TestCaseRestApi.Data;
+using TestCaseRestApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DictionaryKeyPolicy = null;
 });
 builder.Services.AddDbContext<AppDataContext>(options => options.UseNpgsql(connection));
+
+builder.Services.AddScoped<DrillBlockRepository>();
+builder.Services.AddScoped<DrillBlockPointRepository>();
+builder.Services.AddScoped<HolePointRepository>();
+builder.Services.AddScoped<HoleRepository>();
 
 var app = builder.Build();
 

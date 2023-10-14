@@ -18,5 +18,7 @@ namespace TestCaseRestApi.Models
             DrillBlockModel = new DrillBlockModel(drillBlockPoint.DrillBlock);
         }
 
+        public DrillBlockPointModel() { }
+
     }
 }

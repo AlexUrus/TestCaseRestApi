@@ -14,5 +14,10 @@ namespace TestCaseRestApi.Models
             Point = new Point(holePoint.X, holePoint.Y, holePoint.Z);
             HoleModel = new HoleModel(holePoint.Hole);
         }
+
+        public HolePointModel()
+        {
+            
+        }
     }
 }

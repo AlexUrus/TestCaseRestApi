@@ -7,7 +7,10 @@ namespace TestCaseRestApi.Models
     {
         public string Name { get; set; }
         public DateTime UpdateTime { get; set; }
+
+        [JsonIgnore]
         public List<Hole> Holes { get; set; }
+        [JsonIgnore]
         public List<DrillBlockPoint> DrillBlockPoints { get; set; }
 
         public DrillBlockModel(DrillBlock drillBlock)
@@ -18,5 +21,7 @@ namespace TestCaseRestApi.Models
             Holes = new List<Hole>();
             DrillBlockPoints = new List<DrillBlockPoint>();
         }
+
+        public DrillBlockModel() { }
     }
 }
