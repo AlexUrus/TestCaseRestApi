@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NLog;
 using TestCaseRestApi.Mappers.DTO_Model;
 using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Repositories;
@@ -11,6 +12,7 @@ namespace TestCaseRestApi.Controllers
     {
         private readonly DrillBlockPointRepository _repository;
         private readonly DrillBlockPointMapperDM _mapper;
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         public DrillBlockPointController(DrillBlockPointRepository repository)
         {
@@ -35,6 +37,7 @@ namespace TestCaseRestApi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 return new JsonResult(new { error = ex.Message })
                 {
                     StatusCode = 500
@@ -55,6 +58,7 @@ namespace TestCaseRestApi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 return new JsonResult(new { error = ex.Message })
                 {
                     StatusCode = 500
@@ -73,6 +77,7 @@ namespace TestCaseRestApi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 return new JsonResult(new { error = ex.Message })
                 {
                     StatusCode = 500
@@ -98,6 +103,7 @@ namespace TestCaseRestApi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 return new JsonResult(new { error = ex.Message })
                 {
                     StatusCode = 500
@@ -120,6 +126,7 @@ namespace TestCaseRestApi.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 return new JsonResult(new { error = ex.Message })
                 {
                     StatusCode = 500

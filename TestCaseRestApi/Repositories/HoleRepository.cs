@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NLog;
 using TestCaseRestApi.CustomException;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Mappers.Object_Model;
@@ -10,6 +11,7 @@ namespace TestCaseRestApi.Repositories
     {
         private readonly HoleMapperOM _mapper;
         private readonly AppDataContext _context;
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         public HoleRepository(AppDataContext context)
         {
@@ -26,6 +28,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex);
                 throw new HoleRepositoryException("Ошибка при добавлении элемента.", ex);
             }
         }
@@ -43,6 +46,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex);
                 throw new HoleRepositoryException("Ошибка при удалении элемента.", ex);
             }
         }
@@ -61,6 +65,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex);
                 throw new HoleRepositoryException("Ошибка при получении всех элементов.", ex);
             }
         }
@@ -78,6 +83,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex);
                 throw new HoleRepositoryException("Ошибка при получении элемента по ID.", ex);
             }
         }
@@ -97,6 +103,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex);
                 throw new HoleRepositoryException("Ошибка при обновлении элемента.", ex);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NLog;
 using TestCaseRestApi.CustomException;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Mappers.Object_Model;
@@ -10,6 +11,7 @@ namespace TestCaseRestApi.Repositories
     {
         private readonly DrillBlockPointMapperOM _mapper;
         private readonly AppDataContext _context;
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         public DrillBlockPointRepository(AppDataContext context)
         {
@@ -26,6 +28,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             { 
+                _logger.Error(ex);
                 throw new DrillBlockPointRepositoryException("Ошибка при добавлении элемента.", ex);
             }
         }
@@ -43,6 +46,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex);
                 throw new DrillBlockPointRepositoryException("Ошибка при удалении элемента.", ex);
             }
         }
@@ -62,6 +66,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 throw new DrillBlockPointRepositoryException("Ошибка при получении всех элементов.", ex);
             }
         }
@@ -79,6 +84,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 throw new DrillBlockPointRepositoryException("Ошибка при получении элемента по ID.", ex);
             }
         }
@@ -105,6 +111,7 @@ namespace TestCaseRestApi.Repositories
             }
             catch (DbUpdateException ex)
             {
+                _logger.Error(ex);
                 throw new DrillBlockPointRepositoryException("Ошибка при обновлении элемента.", ex);
             }
         }
