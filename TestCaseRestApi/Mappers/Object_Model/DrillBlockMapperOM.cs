@@ -1,9 +1,10 @@
 ﻿using TestCaseRestApi.Models;
+using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Objects;
 
-namespace TestCaseRestApi.Mappers
+namespace TestCaseRestApi.Mappers.Object_Model
 {
-    public class DrillBlockMapper : IMapper<DrillBlockModel,DrillBlock>
+    public class DrillBlockMapperOM : IMapperOM<DrillBlockModel, DrillBlock>
     {
         public DrillBlockModel ToModel(DrillBlock obj)
         {
@@ -19,5 +20,6 @@ namespace TestCaseRestApi.Mappers
                 UpdateTime = model.UpdateTime,
             };
         }
+
     }
 }

@@ -9,8 +9,6 @@ namespace TestCaseRestApi.Models
         public string Name { get; set; }
         public double Depth { get; set; }
         public DrillBlockModel DrillBlockModel { get; set; }
-
-        [JsonIgnore]
         public List<HolePointModel> HolePoints { get; set; }
 
         public HoleModel(Hole hole) 
@@ -22,6 +20,13 @@ namespace TestCaseRestApi.Models
             HolePoints = new List<HolePointModel>();
         }
 
-       public HoleModel() { }
+        public HoleModel(int id, string name, double depth, DrillBlockModel drillBlockModel, List<HolePointModel> holePoints) 
+        {
+            Id = id;
+            Name = name;
+            Depth = depth;
+            DrillBlockModel = drillBlockModel;
+            HolePoints = holePoints;
+        }
     }
 }

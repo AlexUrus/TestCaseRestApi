@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Objects;
 
 namespace TestCaseRestApi.Models
@@ -7,21 +8,26 @@ namespace TestCaseRestApi.Models
     {
         public string Name { get; set; }
         public DateTime UpdateTime { get; set; }
-
-        [JsonIgnore]
-        public List<Hole> Holes { get; set; }
-        [JsonIgnore]
-        public List<DrillBlockPoint> DrillBlockPoints { get; set; }
+        public List<HoleModel> HoleModels { get; set; }
+        public List<DrillBlockPointModel> DrillBlockPointModels { get; set; }
 
         public DrillBlockModel(DrillBlock drillBlock)
         {
             Id = drillBlock.Id;
             Name = drillBlock.Name;
             UpdateTime = drillBlock.UpdateTime;
-            Holes = new List<Hole>();
-            DrillBlockPoints = new List<DrillBlockPoint>();
+            HoleModels = new List<HoleModel>();
+            DrillBlockPointModels = new List<DrillBlockPointModel>();
         }
 
-        public DrillBlockModel() { }
+        public DrillBlockModel(int id, string name, DateTime updatetime, List<HoleModel> holeModels = null, List<DrillBlockPointModel> drillBlockPointModels = null)
+        {
+            Id = id;
+            Name = name;
+            UpdateTime = updatetime;
+
+            HoleModels = holeModels ?? new List<HoleModel>();
+            DrillBlockPointModels = drillBlockPointModels ?? new List<DrillBlockPointModel>();
+        }
     }
 }

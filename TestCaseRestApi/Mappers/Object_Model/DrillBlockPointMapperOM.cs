@@ -1,9 +1,9 @@
 ﻿using TestCaseRestApi.Models;
 using TestCaseRestApi.Objects;
 
-namespace TestCaseRestApi.Mappers
+namespace TestCaseRestApi.Mappers.Object_Model
 {
-    public class DrillBlockPointMapper : IMapper<DrillBlockPointModel, DrillBlockPoint>
+    public class DrillBlockPointMapperOM : IMapperOM<DrillBlockPointModel, DrillBlockPoint>
     {
         public DrillBlockPointModel ToModel(DrillBlockPoint obj)
         {

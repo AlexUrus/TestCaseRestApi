@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestCaseRestApi.Data;
+using TestCaseRestApi.Mappers.DTO_Model;
 using TestCaseRestApi.Models;
+using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Objects;
 using TestCaseRestApi.Repositories;
 
@@ -12,65 +14,121 @@ namespace TestCaseRestApi.Controllers
     public class DrillBlockPointController : ControllerBase
     {
         private readonly DrillBlockPointRepository _repository;
+        private readonly DrillBlockPointMapperDM _mapper;
+
         public DrillBlockPointController(DrillBlockPointRepository repository)
         {
             _repository = repository;
+            _mapper = new DrillBlockPointMapperDM();
         }
 
-        // GET api/DrillBlockPointModel
         [HttpGet]
         public JsonResult Get()
         {
-            var model = _repository.GetAll();
-            return new JsonResult(Ok(model));
+            try
+            {
+                var models = _repository.GetAll();
+
+                var modelDTOs = new List<DrillBlockPointModelDTO>();
+                foreach (var model in models)
+                {
+                    modelDTOs.Add(_mapper.ToModelDTO(model));
+                }
+
+                return new JsonResult(Ok(modelDTOs));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = ex.Message })
+                {
+                    StatusCode = 500
+                };
+            }
         }
 
-        // GET api/DrillBlockPointModel/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
-            var model = _repository.GetById(id);
-            if (model == null)
-                return new JsonResult(NotFound());
+            try
+            {
+                var model = _repository.GetById(id);
+                if (model == null)
+                    return new JsonResult(NotFound());
 
-            return new JsonResult(Ok(model));
+                return new JsonResult(Ok(model));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = ex.Message })
+                {
+                    StatusCode = 500
+                };
+            }
         }
 
-        // POST api/DrillBlockPointModel
         [HttpPost]
-        public JsonResult Post(DrillBlockPointModel model)
+        public JsonResult Post(DrillBlockPointModelDTO modelDTO)
         {
-            _repository.Add(model);
-            return new JsonResult(NoContent());
+            try
+            {
+                var model = _mapper.ToModel(modelDTO);
+                _repository.Add(model);
+                return new JsonResult(NoContent());
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = ex.Message })
+                {
+                    StatusCode = 500
+                };
+            }
         }
 
-        // PUT api/DrillBlockPointModel/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, DrillBlockPointModel model)
+        public JsonResult Put(int id, DrillBlockPointModelDTO modelDTO)
         {
-            if (id != model.Id)
-                return new JsonResult(BadRequest());
+            try
+            {
+                if (id != modelDTO.Id)
+                    return new JsonResult(BadRequest());
 
-            var existingModel = _repository.GetById(id);
-            if (existingModel == null)
-                return new JsonResult(NotFound());
+                var existingModel = _repository.GetById(id);
+                if (existingModel == null)
+                    return new JsonResult(NotFound());
 
-            _repository.Update(existingModel);
+                _repository.Update(existingModel);
 
-            return new JsonResult(NoContent());
+                return new JsonResult(NoContent());
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = ex.Message })
+                {
+                    StatusCode = 500
+                };
+            }
         }
 
-        // DELETE api/DrillBlockPointModel/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            var model = _repository.GetById(id);
-            if (model == null)
-                return new JsonResult(NotFound());
+            try
+            {
+                var model = _repository.GetById(id);
+                if (model == null)
+                    return new JsonResult(NotFound());
 
-            _repository.Delete(id);
+                _repository.Delete(id);
 
-            return new JsonResult(NoContent());
+                return new JsonResult(NoContent());
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = ex.Message })
+                {
+                    StatusCode = 500
+                };
+            }
         }
     }
 }

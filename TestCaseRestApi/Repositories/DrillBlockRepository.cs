@@ -1,5 +1,7 @@
-﻿using TestCaseRestApi.Data;
-using TestCaseRestApi.Mappers;
+﻿using Microsoft.EntityFrameworkCore;
+using TestCaseRestApi.CustomException;
+using TestCaseRestApi.Data;
+using TestCaseRestApi.Mappers.Object_Model;
 using TestCaseRestApi.Models;
 using TestCaseRestApi.Objects;
 
@@ -7,51 +9,94 @@ namespace TestCaseRestApi.Repositories
 {
     public class DrillBlockRepository : IRepository<DrillBlockModel>
     {
-        private readonly DrillBlockMapper _mapper;
+        private readonly DrillBlockMapperOM _mapper;
         private readonly AppDataContext _context;
 
         public DrillBlockRepository(AppDataContext context)
         {
             _context = context;
-            _mapper = new DrillBlockMapper();
+            _mapper = new DrillBlockMapperOM();
         }
 
-        public void Add(DrillBlockModel drillBlockModel)
+        public void Add(DrillBlockModel model)
         {
-            _context.DrillBlocks.Add(_mapper.ToObject(drillBlockModel));
-            _context.SaveChanges();
+            try
+            {
+                _context.DrillBlocks.Add(_mapper.ToObject(model));
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DrillBlockRepositoryException("Ошибка при добавлении элемента.", ex);
+            }
         }
 
         public void Delete(int id)
         {
-            var drillBlock = _context.DrillBlocks.Find(id);
-            if (drillBlock != null)
+            try
             {
-                _context.DrillBlocks.Remove(drillBlock);
-                _context.SaveChanges();
+                var entity = _context.DrillBlocks.Find(id);
+                if (entity != null)
+                {
+                    _context.DrillBlocks.Remove(entity);
+                    _context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DrillBlockRepositoryException("Ошибка при удалении элемента.", ex);
             }
         }
+
 
         public List<DrillBlockModel> GetAll()
         {
-            var drillBlocks = _context.DrillBlocks.ToList();
-            var drillBlockModels = new List<DrillBlockModel>();
-            foreach (var drillBlock in drillBlocks)
+            try
             {
-                drillBlockModels.Add(_mapper.ToModel(drillBlock));
+                var listObjects = _context.DrillBlocks.ToList();
+                var listModels = new List<DrillBlockModel>();
+                foreach (var obj in listObjects)
+                {
+                    listModels.Add(_mapper.ToModel(obj));
+                }
+                return listModels;
             }
-            return drillBlockModels;
+            catch (Exception ex)
+            {
+                throw new DrillBlockRepositoryException("Ошибка при получении всех элементов.", ex);
+            }
         }
 
-        public DrillBlockModel GetById(int id)
+        public DrillBlockModel? GetById(int id)
         {
-            return _mapper.ToModel( _context.DrillBlocks.Find(id));
+            try
+            {
+                var obj = _context.DrillBlocks.Find(id);
+
+                if (obj != null)
+                    return _mapper.ToModel(obj);
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                throw new DrillBlockRepositoryException("Ошибка при получении элемента по ID.", ex);
+            }
         }
 
         public void Update(DrillBlockModel drillBlockModel)
         {
-            _context.DrillBlocks.Update(_mapper.ToObject(drillBlockModel));
-            _context.SaveChanges();
+            try
+            {
+                var existingObj = _context.DrillBlocks.Find(drillBlockModel.Id);
+                existingObj.Name = drillBlockModel.Name;
+                existingObj.UpdateTime = DateTime.UtcNow;
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DrillBlockRepositoryException("Ошибка при обновлении элемента.", ex);
+            }
         }
 
         

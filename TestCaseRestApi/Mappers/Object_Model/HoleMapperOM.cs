@@ -1,9 +1,9 @@
 ﻿using TestCaseRestApi.Models;
 using TestCaseRestApi.Objects;
 
-namespace TestCaseRestApi.Mappers
+namespace TestCaseRestApi.Mappers.Object_Model
 {
-    public class HoleMapper : IMapper<HoleModel, Hole>
+    public class HoleMapperOM : IMapperOM<HoleModel, Hole>
     {
         public HoleModel ToModel(Hole obj)
         {

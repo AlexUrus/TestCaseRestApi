@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Repositories;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -9,6 +10,7 @@ string connection = builder.Configuration.GetConnectionString("DefaultConnection
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;

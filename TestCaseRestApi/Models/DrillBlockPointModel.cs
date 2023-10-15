@@ -18,7 +18,12 @@ namespace TestCaseRestApi.Models
             DrillBlockModel = new DrillBlockModel(drillBlockPoint.DrillBlock);
         }
 
-        public DrillBlockPointModel() { }
-
+        public DrillBlockPointModel(int id, int sequence, Point point, DrillBlockModel drillBlockModel)
+        {
+            Id = id;
+            Sequence = sequence;
+            Point = point;
+            DrillBlockModel = drillBlockModel;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TestCaseRestApi.CustomException;
 using TestCaseRestApi.Data;
-using TestCaseRestApi.Mappers;
+using TestCaseRestApi.Mappers.Object_Model;
 using TestCaseRestApi.Models;
 using TestCaseRestApi.Objects;
 
@@ -8,51 +9,97 @@ namespace TestCaseRestApi.Repositories
 {
     public class HoleRepository : IRepository<HoleModel>
     {
-        private readonly HoleMapper _mapper;
+        private readonly HoleMapperOM _mapper;
         private readonly AppDataContext _context;
 
         public HoleRepository(AppDataContext context)
         {
             _context = context;
-            _mapper = new HoleMapper();
+            _mapper = new HoleMapperOM();
         }
 
         public void Add(HoleModel model)
         {
-            _context.Holes.Add(_mapper.ToObject(model));
-            _context.SaveChanges();
+            try
+            {
+                _context.Holes.Add(_mapper.ToObject(model));
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new HoleRepositoryException("Ошибка при добавлении элемента.", ex);
+            }
         }
 
         public void Delete(int id)
         {
-            var entity = _context.Holes.Find(id);
-            if (entity != null)
+            try
             {
-                _context.Holes.Remove(entity);
-                _context.SaveChanges();
+                var entity = _context.Holes.Find(id);
+                if (entity != null)
+                {
+                    _context.Holes.Remove(entity);
+                    _context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new HoleRepositoryException("Ошибка при удалении элемента.", ex);
             }
         }
 
         public List<HoleModel> GetAll()
         {
-            var listObjects = _context.Holes.ToList();
-            var listModels = new List<HoleModel>();
-            foreach (var obj in listObjects)
+            try
             {
-                listModels.Add(_mapper.ToModel(obj));
+                var listObjects = _context.Holes.ToList();
+                var listModels = new List<HoleModel>();
+                foreach (var obj in listObjects)
+                {
+                    listModels.Add(_mapper.ToModel(obj));
+                }
+                return listModels;
             }
-            return listModels;
+            catch (DbUpdateException ex)
+            {
+                throw new HoleRepositoryException("Ошибка при получении всех элементов.", ex);
+            }
         }
 
-        public HoleModel GetById(int id)
+        public HoleModel? GetById(int id)
         {
-            return _mapper.ToModel(_context.Holes.Find(id));
+            try
+            {
+                var obj = _context.Holes.Find(id);
+
+                if (obj != null)
+                    return _mapper.ToModel(obj);
+                else
+                    return null;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new HoleRepositoryException("Ошибка при получении элемента по ID.", ex);
+            }
         }
 
         public void Update(HoleModel model)
         {
-            _context.Holes.Update(_mapper.ToObject(model));
-            _context.SaveChanges();
+            try
+            {
+                var existingObj = _context.Holes.Find(model.Id);
+                existingObj.Name = model.Name;
+                existingObj.Depth = model.Depth;
+
+                if (model.DrillBlockModel != null)
+                    existingObj.DrillBlockId = model.DrillBlockModel.Id;
+
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new HoleRepositoryException("Ошибка при обновлении элемента.", ex);
+            }
         }
     }
 }
