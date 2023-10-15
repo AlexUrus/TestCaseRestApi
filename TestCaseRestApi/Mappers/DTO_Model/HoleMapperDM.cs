@@ -30,14 +30,14 @@ namespace TestCaseRestApi.Mappers.DTO_Model
         public HoleModelDTO ToModelDTO(HoleModel model)
         {
             var holePointModelDTOs = new List<HolePointModelDTO>();
-            foreach (var item in model.HolePointDTOs)
+            foreach (var item in model.HolePoints)
             {
                 holePointModelDTOs.Add(_holePointMapperDM.ToModelDTO(item));
             }
 
             var drillblockModelDTO = _drillBlockMapperDM.ToModelDTO(model.DrillBlockModel);
 
-            return new HoleModel(model.Id, model.Name, model.Depth, drillblockModelDTO, holePointModelDTOs);
+            return new HoleModelDTO(model.Id, model.Name, drillblockModelDTO, holePointModelDTOs);
         }
     }
 }
