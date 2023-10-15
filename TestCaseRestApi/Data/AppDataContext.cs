@@ -14,8 +14,5 @@ namespace TestCaseRestApi.Data
         {
             Database.EnsureCreated();
         }
-
-        
-
     }
 }

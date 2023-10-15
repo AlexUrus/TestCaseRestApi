@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using TestCaseRestApi.Objects;
-
-namespace TestCaseRestApi.ModelsDTO
+﻿namespace TestCaseRestApi.ModelsDTO
 {
     public class HolePointModelDTO : AbstractModelDTO
     {

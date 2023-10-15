@@ -3,7 +3,6 @@ using TestCaseRestApi.CustomException;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Mappers.Object_Model;
 using TestCaseRestApi.Models;
-using TestCaseRestApi.Objects;
 
 namespace TestCaseRestApi.Repositories
 {

@@ -1,6 +1,4 @@
-﻿using TestCaseRestApi.Objects;
-
-namespace TestCaseRestApi.ModelsDTO
+﻿namespace TestCaseRestApi.ModelsDTO
 {
     public abstract class AbstractModelDTO
     {

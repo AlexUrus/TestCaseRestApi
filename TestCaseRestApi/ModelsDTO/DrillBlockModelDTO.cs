@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using TestCaseRestApi.Models;
-using TestCaseRestApi.ModelsDTO;
-
-namespace TestCaseRestApi.ModelsDTO
+﻿namespace TestCaseRestApi.ModelsDTO
 {
     public class DrillBlockModelDTO : AbstractModelDTO
     {

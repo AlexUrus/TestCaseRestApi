@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TestCaseRestApi.Mappers;
-using TestCaseRestApi.Models;
-using TestCaseRestApi.Objects;
+﻿using TestCaseRestApi.Models;
 
 namespace TestCaseRestApi.Repositories
 {

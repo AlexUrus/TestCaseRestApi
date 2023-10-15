@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TestCaseRestApi.Objects
+﻿namespace TestCaseRestApi.Objects
 {
     public class DrillBlock : AbstractObject
     {

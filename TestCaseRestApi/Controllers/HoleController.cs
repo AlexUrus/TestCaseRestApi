@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TestCaseRestApi.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using TestCaseRestApi.Mappers.DTO_Model;
-using TestCaseRestApi.Models;
 using TestCaseRestApi.ModelsDTO;
-using TestCaseRestApi.Objects;
 using TestCaseRestApi.Repositories;
 
 namespace TestCaseRestApi.Controllers

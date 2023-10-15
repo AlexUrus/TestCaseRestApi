@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TestCaseRestApi.Mappers.DTO_Model;
-using TestCaseRestApi.Models;
 using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Repositories;
 
