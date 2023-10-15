@@ -10,14 +10,12 @@ namespace TestCaseRestApi.ModelsDTO
         public string Name { get; set; }
         public double Depth { get; set; }
         public DrillBlockModelDTO DrillBlockModelDTO { get; set; }
-        public List<HolePointModelDTO> HolePointDTOs { get; set; }
 
-        public HoleModelDTO(int id, string name, DrillBlockModelDTO drillBlockModelDTO, List<HolePointModelDTO> holePointDTOs)
+        public HoleModelDTO(int id, string name, DrillBlockModelDTO drillBlockModelDTO)
         {
             Id = id;
             Name = name;
             DrillBlockModelDTO = drillBlockModelDTO;
-            HolePointDTOs = holePointDTOs;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace TestCaseRestApi.Mappers.Object_Model
     {
         public DrillBlockModel ToModel(DrillBlock obj)
         {
-            return new DrillBlockModel(obj);
+            return new DrillBlockModel(obj.Id, obj.Name, obj.UpdateTime);
         }
 
         public DrillBlock ToObject(DrillBlockModel model)

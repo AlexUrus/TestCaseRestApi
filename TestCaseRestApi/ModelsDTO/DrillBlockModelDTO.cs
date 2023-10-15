@@ -8,17 +8,12 @@ namespace TestCaseRestApi.ModelsDTO
     {
         public string Name { get; set; }
         public DateTime UpdateTime { get; set; }
-        public List<HoleModelDTO> HoleModelDTOs { get; set; }
-        public List<DrillBlockPointModelDTO> DrillBlockPointModelDTOs { get; set; }
 
-        public DrillBlockModelDTO(int id, string name, DateTime updatetime, List<HoleModelDTO> holeModelIds = null, List<DrillBlockPointModelDTO> drillBlockPointModelIds = null)
+        public DrillBlockModelDTO(int id, string name, DateTime updatetime)
         {
             Id = id;
             Name = name;
             UpdateTime = updatetime;
-
-            HoleModelDTOs = holeModelIds ?? new List<HoleModelDTO>();
-            DrillBlockPointModelDTOs = drillBlockPointModelIds ?? new List<DrillBlockPointModelDTO>();
         }
     }
 }

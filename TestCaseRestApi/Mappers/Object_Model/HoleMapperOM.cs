@@ -5,9 +5,15 @@ namespace TestCaseRestApi.Mappers.Object_Model
 {
     public class HoleMapperOM : IMapperOM<HoleModel, Hole>
     {
+        private readonly DrillBlockMapperOM _drillBlockMapper;
+        public HoleMapperOM()
+        {
+            _drillBlockMapper = new DrillBlockMapperOM();
+        }
         public HoleModel ToModel(Hole obj)
         {
-            return new HoleModel(obj);
+            var drillBlockModel = _drillBlockMapper.ToModel(obj.DrillBlock);
+            return new HoleModel(obj.Id, obj.Name, obj.Depth, drillBlockModel);
         }
 
         public Hole ToObject(HoleModel model)

@@ -51,7 +51,8 @@ namespace TestCaseRestApi.Repositories
         {
             try
             {
-                var listObjects = _context.DrillBlockPoints.ToList();
+                var listObjects = _context.DrillBlockPoints.Include(d => d.DrillBlock).ToList();
+
                 var listModels = new List<DrillBlockPointModel>();
                 foreach (var obj in listObjects)
                 {

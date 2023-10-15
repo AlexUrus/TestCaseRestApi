@@ -52,7 +52,7 @@ namespace TestCaseRestApi.Repositories
         {
             try
             {
-                var listObjects = _context.Holes.ToList();
+                var listObjects = _context.Holes.Include(h => h.DrillBlock).ToList();
                 var listModels = new List<HoleModel>();
                 foreach (var obj in listObjects)
                 {

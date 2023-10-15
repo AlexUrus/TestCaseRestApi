@@ -10,14 +10,6 @@ namespace TestCaseRestApi.Models
         public Point Point { get; set; }
         public DrillBlockModel DrillBlockModel { get; set; }
 
-        public DrillBlockPointModel(DrillBlockPoint drillBlockPoint) 
-        {
-            Id = drillBlockPoint.Id;
-            Sequence = drillBlockPoint.Sequence;
-            Point = new Point(drillBlockPoint.X, drillBlockPoint.Y, drillBlockPoint.Z);
-            DrillBlockModel = new DrillBlockModel(drillBlockPoint.DrillBlock);
-        }
-
         public DrillBlockPointModel(int id, int sequence, Point point, DrillBlockModel drillBlockModel)
         {
             Id = id;
