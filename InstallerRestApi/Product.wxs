@@ -1,0 +1,73 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+
+	<!-- путь к директории где хранятся исх. файлы ..\TestCaseRestApi\bin\Debug-->
+	<?define TargetDir=$(var.TestCaseRestApi.TargetDir)$(var.TestCaseRestApi.ProjectName).exe?>
+	<!--наименование проекта ("TestCaseRestApi")-->
+	<?define ProductName=$(var.TestCaseRestApi.ProjectName)?>
+	<!--Наименование исполняемого файла-->
+	<?define TargetFileName=$(var.TestCaseRestApi.TargetFileName)?>
+	<?define description="Тестовый пример установщика"?>
+	
+	<Package Name="$(var.ProductName)" Language="1049" Codepage="1251" Version="1.0.0" Manufacturer="Alexandr Urusov" UpgradeCode="56fee15c-f9f2-4021-b77f-643ba8a62994" InstallerVersion="200">
+		
+		<SummaryInformation Description="$(var.description)" Codepage="1251" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate  EmbedCab="yes"/>
+		
+
+		<Feature Id="ProductFeature" Title="InstallerRestApi" Level="1">
+			<ComponentRef Id="ProductComponents" />
+			<ComponentRef Id="ShortcutMenu" />
+			<ComponentRef Id="ShortcutDesktop" />
+		</Feature>
+
+		<CustomAction Id="LaunchInstalledExe" Directory="INSTALLFOLDER" Execute="immediate" Impersonate="yes" Return="asyncNoWait" ExeCommand="[#$(var.TargetFileName)] -install" />
+		<InstallExecuteSequence>
+			<Custom Action="LaunchInstalledExe" After="InstallFinalize" />
+		</InstallExecuteSequence>
+	</Package>
+
+	<Fragment>
+			<StandardDirectory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="$(var.ProductName)" />
+			</StandardDirectory>
+		
+				<StandardDirectory Id="DesktopFolder" />
+
+			<StandardDirectory Id="ProgramMenuFolder">
+				<Directory Id="AppProgramsFolder" Name="$(var.ProductName)" />
+			</StandardDirectory>
+		</Fragment>
+
+	<Fragment>
+		<Component Guid="{e1150b01-c6ae-40ee-b710-13df6b8dd34a}" Id="ProductComponents" Directory="INSTALLFOLDER">
+			<File Id="___var.TargetFileName_.config" Name="$(var.TargetFileName).config" Source="$(var.TargetDir)" />
+			<File Id="___var.TargetFileName_" Name="$(var.TargetFileName)" Source="$(var.TargetDir)" />
+		</Component>
+	</Fragment>
+
+	<Fragment>
+		<Component Id="ShortcutMenu" Guid="{409d7f41-96ff-4b41-91d8-4e1f445e47ef}" Directory="AppProgramsFolder">
+			<!-- Создать ярлык запуска приложения в Program Menu-->
+			<Shortcut Id="StartMenu" Name="$(var.ProductName)" Description="$(var.description)" Target="[INSTALLFOLDER]$(var.TargetFileName)" />
+			<!--Удалить ярлык приложения из меню программы при удалении-->
+			<RemoveFolder Id="RemoveShortcut" On="uninstall" />
+			<!-- Cоздать запись приложения в реестре -->
+			<RegistryValue Root="HKCU" Key="SoftWare\[Manufacturer]\[ProductName]" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+
+			<!-- Удалить приложение. Ярлык Удаление приложения-->
+			<Shortcut Id="UninstallProduct" Name="Удалить $(var.ProductName)" Target="[SystemFolder]msiexec.exe" Arguments="/uninstall [ProductCode]"/>
+		</Component>
+	</Fragment>
+
+	<Fragment>
+		<!-- Создать ярлык на рабочем столе -->
+		<Component Id="ShortcutDesktop" Guid="{5B45E98F-6544-4A68-93F8-1D6FF0BD4E50}" Directory="DesktopFolder">
+			<Shortcut Id="ShortcutDesktop" Name="$(var.ProductName)" Description="$(var.description)" Target="[INSTALLFOLDER]$(var.TargetFileName)" />
+			<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+			<RegistryValue Root="HKCU" Key="SoftWare\[Manufacturer]\[ProductName]" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+		</Component>
+	</Fragment>
+	
+</Wix>
