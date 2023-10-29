@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NLog.Extensions.Logging;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Repositories;
 
@@ -18,6 +19,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 builder.Services.AddDbContext<AppDataContext>(options => options.UseNpgsql(connection));
 
+builder.Services.AddLogging(logBuilder =>
+{
+    logBuilder.ClearProviders();
+    logBuilder.AddNLog();
+});
+
 builder.Services.AddScoped<DrillBlockRepository>();
 builder.Services.AddScoped<DrillBlockPointRepository>();
 builder.Services.AddScoped<HolePointRepository>();
@@ -25,16 +32,8 @@ builder.Services.AddScoped<HoleRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapControllers();
 
