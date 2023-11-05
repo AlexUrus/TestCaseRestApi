@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using NLog.Extensions.Logging;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Repositories;
+
+var _logger = LogManager.GetCurrentClassLogger();
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,18 +15,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-    options.JsonSerializerOptions.DictionaryKeyPolicy = null;
-});
-builder.Services.AddDbContext<AppDataContext>(options => options.UseNpgsql(connection));
-
 builder.Services.AddLogging(logBuilder =>
 {
     logBuilder.ClearProviders();
     logBuilder.AddNLog();
 });
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    options.JsonSerializerOptions.DictionaryKeyPolicy = null;
+});
+
+try
+{
+    builder.Services.AddDbContext<AppDataContext>(options => options.UseNpgsql(connection));
+}
+catch (Exception)
+{
+    _logger.Error("Invalid connect to Database. Check connection string");
+}
 
 builder.Services.AddScoped<DrillBlockRepository>();
 builder.Services.AddScoped<DrillBlockPointRepository>();
