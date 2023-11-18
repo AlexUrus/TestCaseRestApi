@@ -1,29 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NLog;
 using TestCaseRestApi.CustomException;
 using TestCaseRestApi.Data;
-using TestCaseRestApi.Mappers.Object_Model;
 using TestCaseRestApi.Models;
+using TestCaseRestApi.Objects;
 
 namespace TestCaseRestApi.Repositories
 {
     public class DrillBlockPointRepository : IRepository<DrillBlockPointModel>
     {
-        private readonly DrillBlockPointMapperOM _mapper;
+        private readonly IMapper _mapper;
         private readonly AppDataContext _context;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public DrillBlockPointRepository(AppDataContext context)
+        public DrillBlockPointRepository(AppDataContext context, IMapper mapper)
         {
             _context = context;
-            _mapper = new DrillBlockPointMapperOM();
+            _mapper = mapper;
         }
 
         public void Add(DrillBlockPointModel model)
         {
             try
             {
-                _context.DrillBlockPoints.Add(_mapper.ToObject(model));
+                var item = _mapper.Map<DrillBlockPoint>(model);
+                _context.DrillBlockPoints.Add(item);
                 _context.SaveChanges();
             }
             catch (DbUpdateException ex)
@@ -60,7 +62,7 @@ namespace TestCaseRestApi.Repositories
                 var listModels = new List<DrillBlockPointModel>();
                 foreach (var obj in listObjects)
                 {
-                    listModels.Add(_mapper.ToModel(obj));
+                    listModels.Add(_mapper.Map<DrillBlockPointModel>(obj));
                 }
                 return listModels;
             }
@@ -78,7 +80,7 @@ namespace TestCaseRestApi.Repositories
                 var obj = _context.DrillBlockPoints.Find(id);
 
                 if (obj != null)
-                    return _mapper.ToModel(obj);
+                    return _mapper.Map<DrillBlockPointModel>(obj);
                 else
                     return null;
             }

@@ -1,29 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NLog;
 using TestCaseRestApi.CustomException;
 using TestCaseRestApi.Data;
-using TestCaseRestApi.Mappers.Object_Model;
 using TestCaseRestApi.Models;
+using TestCaseRestApi.Objects;
 
 namespace TestCaseRestApi.Repositories
 {
     public class DrillBlockRepository : IRepository<DrillBlockModel>
     {
-        private readonly DrillBlockMapperOM _mapper;
+        private readonly IMapper _mapper;
         private readonly AppDataContext _context;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public DrillBlockRepository(AppDataContext context)
+        public DrillBlockRepository(AppDataContext context, IMapper mapper)
         {
             _context = context;
-            _mapper = new DrillBlockMapperOM();
+            _mapper = mapper;
         }
 
         public void Add(DrillBlockModel model)
         {
             try
             {
-                _context.DrillBlocks.Add(_mapper.ToObject(model));
+                _context.DrillBlocks.Add(_mapper.Map<DrillBlock>(model));
                 _context.SaveChanges();
             }
             catch (DbUpdateException ex)
@@ -60,7 +61,7 @@ namespace TestCaseRestApi.Repositories
                 var listModels = new List<DrillBlockModel>();
                 foreach (var obj in listObjects)
                 {
-                    listModels.Add(_mapper.ToModel(obj));
+                    listModels.Add(_mapper.Map<DrillBlockModel>(obj));
                 }
                 return listModels;
             }
@@ -78,7 +79,7 @@ namespace TestCaseRestApi.Repositories
                 var obj = _context.DrillBlocks.Find(id);
 
                 if (obj != null)
-                    return _mapper.ToModel(obj);
+                    return _mapper.Map<DrillBlockModel>(obj);
                 else
                     return null;
             }

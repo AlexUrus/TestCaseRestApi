@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using NLog;
-using TestCaseRestApi.Mappers.DTO_Model;
+using TestCaseRestApi.Models;
 using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Repositories;
 
@@ -11,13 +12,13 @@ namespace TestCaseRestApi.Controllers
     public class DrillBlockController : ControllerBase
     {
         private readonly DrillBlockRepository _repository;
-        private readonly DrillBlockMapperDM _mapper;
+        private readonly IMapper _mapper;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public DrillBlockController(DrillBlockRepository repository)
+        public DrillBlockController(DrillBlockRepository repository, IMapper mapper)
         {
             _repository = repository;
-            _mapper = new DrillBlockMapperDM();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -30,7 +31,7 @@ namespace TestCaseRestApi.Controllers
                 var modelDTOs = new List<DrillBlockModelDTO>();
                 foreach (var model in models)
                 {
-                    modelDTOs.Add(_mapper.ToModelDTO (model));
+                    modelDTOs.Add(_mapper.Map<DrillBlockModelDTO>(model));
                 }
 
                 return new JsonResult(Ok(modelDTOs));
@@ -53,7 +54,7 @@ namespace TestCaseRestApi.Controllers
                 if (model == null)
                     return new JsonResult(NotFound());
 
-                var modelDTO = _mapper.ToModelDTO (model);  
+                var modelDTO = _mapper.Map<DrillBlockModelDTO>(model);  
 
                 return new JsonResult(Ok(modelDTO));
             }
@@ -72,7 +73,7 @@ namespace TestCaseRestApi.Controllers
         {
             try
             {
-                var model = _mapper.ToModel(modelDTO);
+                var model = _mapper.Map<DrillBlockModel>(modelDTO);
                 _repository.Add(model);
                 return new JsonResult(NoContent());
             }

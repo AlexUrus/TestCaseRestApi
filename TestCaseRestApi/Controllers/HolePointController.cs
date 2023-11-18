@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using NLog;
-using TestCaseRestApi.Mappers.DTO_Model;
+using TestCaseRestApi.Models;
 using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Repositories;
 
@@ -11,12 +12,12 @@ namespace TestCaseRestApi.Controllers
     public class HolePointController : ControllerBase
     {
         private readonly HolePointRepository _repository;
-        private readonly HolePointMapperDM _mapper;
+        private readonly IMapper _mapper;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        public HolePointController(HolePointRepository repository)
+        public HolePointController(HolePointRepository repository, IMapper mapper)
         {
             _repository = repository;
-            _mapper = new HolePointMapperDM();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -29,7 +30,7 @@ namespace TestCaseRestApi.Controllers
                 var modelDTOs = new List<HolePointModelDTO>();
                 foreach (var model in models)
                 {
-                    modelDTOs.Add(_mapper.ToModelDTO(model));
+                    modelDTOs.Add(_mapper.Map<HolePointModelDTO>(model));
                 }
 
                 return new JsonResult(Ok(modelDTOs));
@@ -70,7 +71,7 @@ namespace TestCaseRestApi.Controllers
         {
             try
             {
-                var model = _mapper.ToModel(modelDTO);
+                var model = _mapper.Map<HolePointModel>(modelDTO);
                 _repository.Add(model);
                 return new JsonResult(NoContent());
             }

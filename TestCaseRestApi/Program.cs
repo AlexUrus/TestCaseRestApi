@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Extensions.Logging;
+using TestCaseRestApi;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Repositories;
 
@@ -20,6 +21,7 @@ builder.Services.AddLogging(logBuilder =>
     logBuilder.ClearProviders();
     logBuilder.AddNLog();
 });
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

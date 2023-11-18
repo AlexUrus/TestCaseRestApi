@@ -1,29 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NLog;
 using TestCaseRestApi.CustomException;
 using TestCaseRestApi.Data;
-using TestCaseRestApi.Mappers.Object_Model;
 using TestCaseRestApi.Models;
+using TestCaseRestApi.Objects;
 
 namespace TestCaseRestApi.Repositories
 {
     public class HolePointRepository : IRepository<HolePointModel>
     {
-        private readonly HolePointMapperOM _mapper;
+        private readonly IMapper _mapper;
         private readonly AppDataContext _context;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public HolePointRepository(AppDataContext context)
+        public HolePointRepository(AppDataContext context, IMapper mapper)
         { 
             _context = context;
-            _mapper = new HolePointMapperOM();
+            _mapper = mapper;
         }
 
         public void Add(HolePointModel model)
         {
             try
             {
-                _context.HolePoints.Add(_mapper.ToObject(model));
+                _context.HolePoints.Add(_mapper.Map<HolePoint>(model));
                 _context.SaveChanges();
             }
             catch (DbUpdateException ex)
@@ -59,7 +60,7 @@ namespace TestCaseRestApi.Repositories
                 var listModels = new List<HolePointModel>();
                 foreach (var obj in listObjects)
                 {
-                    listModels.Add(_mapper.ToModel(obj));
+                    listModels.Add(_mapper.Map<HolePointModel>(obj));
                 }
                 return listModels;
             }
@@ -77,7 +78,7 @@ namespace TestCaseRestApi.Repositories
                 var obj = _context.HolePoints.Find(id);
 
                 if (obj != null)
-                    return _mapper.ToModel(obj);
+                    return _mapper.Map<HolePointModel>(obj);
                 else
                     return null;
             }

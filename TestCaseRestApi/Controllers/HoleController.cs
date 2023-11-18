@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using NLog;
-using TestCaseRestApi.Mappers.DTO_Model;
+using TestCaseRestApi.Models;
 using TestCaseRestApi.ModelsDTO;
 using TestCaseRestApi.Repositories;
 
@@ -11,12 +12,12 @@ namespace TestCaseRestApi.Controllers
     public class HoleController : ControllerBase
     {
         private readonly HoleRepository _repository;
-        private readonly HoleMapperDM _mapper;
+        private readonly IMapper _mapper;
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        public HoleController(HoleRepository repository)
+        public HoleController(HoleRepository repository, IMapper mapper)
         {
             _repository = repository;
-            _mapper = new HoleMapperDM();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -29,7 +30,7 @@ namespace TestCaseRestApi.Controllers
                 var modelDTOs = new List<HoleModelDTO>();
                 foreach (var model in models)
                 {
-                    modelDTOs.Add(_mapper.ToModelDTO(model));
+                    modelDTOs.Add(_mapper.Map<HoleModelDTO>(model));
                 }
 
                 return new JsonResult(Ok(modelDTOs));
@@ -70,7 +71,7 @@ namespace TestCaseRestApi.Controllers
         {
             try
             {
-                var model = _mapper.ToModel(modelDTO);
+                var model = _mapper.Map<HoleModel>(modelDTO);
                 _repository.Add(model);
                 return new JsonResult(NoContent());
             }
