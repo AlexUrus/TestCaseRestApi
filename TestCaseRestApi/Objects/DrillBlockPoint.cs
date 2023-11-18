@@ -12,5 +12,10 @@ namespace TestCaseRestApi.Objects
 
         [ForeignKey("DrillBlockId")]
         public DrillBlock DrillBlock { get; set; }
+
+        public DrillBlockPoint()
+        {
+            
+        }
     }
 }

@@ -17,5 +17,10 @@ namespace TestCaseRestApi.Models
             Point = point;
             DrillBlockModel = drillBlockModel;
         }
+
+        public DrillBlockPointModel()
+        {
+            
+        }
     }
 }

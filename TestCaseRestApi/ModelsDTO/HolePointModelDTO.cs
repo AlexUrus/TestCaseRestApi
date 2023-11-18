@@ -12,5 +12,10 @@
             HoleModelDTO = holeModelDTO;
         }
 
+        public HolePointModelDTO()
+        {
+            
+        }
+
     }
 }

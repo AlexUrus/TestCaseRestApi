@@ -12,5 +12,10 @@ namespace TestCaseRestApi.Objects
 
         [ForeignKey("HoleId")]
         public Hole Hole { get; set; }
+
+        public HolePoint()
+        {
+            
+        }
     }
 }

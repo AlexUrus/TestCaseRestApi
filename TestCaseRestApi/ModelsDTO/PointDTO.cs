@@ -12,5 +12,10 @@
             Y = y;
             Z = z;
         }
+
+        public PointDTO()
+        {
+            
+        }
     }
 }

@@ -11,5 +11,7 @@
             Name = name;
             UpdateTime = updatetime;
         }
+
+        public DrillBlockModelDTO() { }
     }
 }

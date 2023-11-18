@@ -14,5 +14,10 @@ namespace TestCaseRestApi.ModelsDTO
             PointDTO = pointDTO;
             DrillBlockModelDTO = drillBlockModelDTO;
         }
+
+        public DrillBlockPointModelDTO()
+        {
+            
+        }
     }
 }

@@ -12,5 +12,10 @@
             Name = name;
             DrillBlockModelDTO = drillBlockModelDTO;
         }
+
+        public HoleModelDTO()
+        {
+            
+        }
     }
 }

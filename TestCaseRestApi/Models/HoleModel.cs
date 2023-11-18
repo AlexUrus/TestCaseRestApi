@@ -17,5 +17,10 @@ namespace TestCaseRestApi.Models
             Depth = depth;
             DrillBlockModel = drillBlockModel;
         }
+
+        public HoleModel()
+        {
+            
+        }
     }
 }
