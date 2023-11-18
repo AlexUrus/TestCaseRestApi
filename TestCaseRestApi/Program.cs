@@ -1,53 +1,75 @@
+using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Extensions.Logging;
+using Npgsql;
+using System.Diagnostics;
 using TestCaseRestApi;
 using TestCaseRestApi.Data;
 using TestCaseRestApi.Repositories;
 
-var _logger = LogManager.GetCurrentClassLogger();
 
-
-var builder = WebApplication.CreateBuilder(args);
-
-string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddLogging(logBuilder =>
+internal class Program
 {
-    logBuilder.ClearProviders();
-    logBuilder.AddNLog();
-});
-builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+    private static void Main(string[] args)
+    {
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-    options.JsonSerializerOptions.DictionaryKeyPolicy = null;
-});
+        var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false);
 
-try
-{
-    builder.Services.AddDbContext<AppDataContext>(options => options.UseNpgsql(connection));
+        IConfiguration configuration = configurationBuilder.Build();
+        
+        var builder = WebApplication.CreateBuilder(args);
+        builder.Host.UseWindowsService();
+        IServiceCollection services = builder.Services;
+
+        AddLogging(services);
+        AddDatabaseClient(services, configuration);
+        AddRepositories(services);
+
+        services.AddControllers();
+
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
+        services.AddAutoMapper(typeof(AppMappingProfile));
+
+        services.AddWindowsService(options =>
+        {
+            options.ServiceName = "TestCaseRestApi";
+        });
+
+        var app = builder.Build();
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        app.MapControllers();
+
+        app.Run();
+    }
+
+    private static void AddLogging(IServiceCollection services)
+    {
+        services.AddLogging(logBuilder =>
+        {
+            logBuilder.ClearProviders();
+            logBuilder.AddNLog();
+        });
+    }
+
+    private static void AddDatabaseClient(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddTransient(serviceProvider => new NpgsqlConnection (configuration.GetConnectionString("Postgres")))
+                   .AddDbContext<AppDataContext>();
+                   
+    }
+
+    private static void AddRepositories(IServiceCollection services)
+    {
+        services.AddScoped<DrillBlockRepository>();
+        services.AddScoped<DrillBlockPointRepository>();
+        services.AddScoped<HolePointRepository>();
+        services.AddScoped<HoleRepository>();
+    }
 }
-catch (Exception)
-{
-    _logger.Error("Invalid connect to Database. Check connection string");
-}
-
-builder.Services.AddScoped<DrillBlockRepository>();
-builder.Services.AddScoped<DrillBlockPointRepository>();
-builder.Services.AddScoped<HolePointRepository>();
-builder.Services.AddScoped<HoleRepository>();
-
-var app = builder.Build();
-
-app.UseSwagger();
-app.UseSwaggerUI();
-
-app.MapControllers();
-
-app.Run();
